@@ -10,26 +10,28 @@
     <video autoplay width="500"></video>
 
     <script>
-      var errorCallback = function (e) {
-        console.log("Reeeejected!", e);
-      };
+      // Option 1. DOMException: Permission denied
+      //   var errorCallback = function (e) {
+      //     console.log("Reeeejected!", e);
+      //   };
 
-      // Not showing vendor prefixes.
-      navigator.getUserMedia(
-        { video: true, audio: false },
-        function (localMediaStream) {
+      //   navigator.getUserMedia(
+      //     { video: true, audio: false },
+      //     function (localMediaStream) {
+      //       var video = document.querySelector("video");
+      //       video.srcObject = localMediaStream;
+      //     },
+      //     errorCallback
+      //   );
+
+      // Option 2.
+      navigator.mediaDevices
+        .getUserMedia({ video: true, audio: false })
+        .then((localMediaStream) => {
+          console.log(localMediaStream);
           var video = document.querySelector("video");
           video.srcObject = localMediaStream;
-        //   video.src = window.URL.createObjectURL(localMediaStream);
-
-          // Note: onloadedmetadata doesn't fire in Chrome when using it with getUserMedia.
-          // See crbug.com/110938.
-          video.onloadedmetadata = function (e) {
-            // Ready to go. Do some stuff.
-          };
-        },
-        errorCallback
-      );
+        });
     </script>
   </body>
 </html>
